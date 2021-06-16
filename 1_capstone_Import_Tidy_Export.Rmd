@@ -1,0 +1,593 @@
+---
+title: "capstone_Import_Tidy_Export"
+author: "Fiona Neilson"
+date: "26/09/2020"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r}
+library(tidyr) 
+library(dplyr) 
+library(tibble)
+```
+
+## READ IN THE DATA
+
+Dan <- read.csv("t3_final_Dan_.csv", stringsAsFactors = TRUE, header = FALSE)
+
+# Batch 1
+
+```{r}
+#Batch 1 (20 files)
+DanSerbian <- read.csv("t3_final_Dan_Serbian.csv", stringsAsFactors = TRUE, header = FALSE)
+DanSinhalese <- read.csv("t3_final_Dan_Sinhalese.csv", stringsAsFactors = TRUE, header = FALSE)
+DanSpanish <- read.csv("t3_final_Dan_Spanish.csv", stringsAsFactors = TRUE, header = FALSE)
+DanTamil <- read.csv("t3_final_Dan_Tamil.csv", stringsAsFactors = TRUE, header = FALSE)
+DanTurkish <- read.csv("t3_final_Dan_Turkish.csv", stringsAsFactors = TRUE, header = FALSE)
+DanUrdu <- read.csv("t3_final_Dan_Urdu.csv", stringsAsFactors = TRUE, header = FALSE)
+DanAlbanian <- read.csv("t3_final_Dan_Albanian.csv", stringsAsFactors = TRUE, header = FALSE)
+DanBurmese <- read.csv("t3_final_Dan_Burmese.csv", stringsAsFactors = TRUE, header = FALSE)
+DanHindi <- read.csv("t3_final_Dan_Hindi.csv", stringsAsFactors = TRUE, header = FALSE)
+DanItalian <- read.csv("t3_final_Dan_Italian.csv", stringsAsFactors = TRUE, header = FALSE)
+DanArabic <- read.csv("t3_final_Dan_Arabic.csv", stringsAsFactors = TRUE, header = FALSE)
+DanCantonese <- read.csv("t3_final_Dan_Cantonese.csv", stringsAsFactors = TRUE, header = FALSE)
+DanDari<- read.csv("t3_final_Dan_Dari.csv", stringsAsFactors = TRUE, header = FALSE)
+DanGreek<- read.csv("t3_final_Dan_Greek.csv", stringsAsFactors = TRUE, header = FALSE)
+DanHazaraghi<- read.csv("t3_final_Dan_Hazaraghi.csv", stringsAsFactors = TRUE, header = FALSE)
+DanKhmer<- read.csv("t3_final_Dan_Khmer.csv", stringsAsFactors = TRUE, header = FALSE)
+DanMandarin<- read.csv("t3_final_Dan_Mandarin.csv", stringsAsFactors = TRUE, header = FALSE)
+DanPunjabi<- read.csv("t3_final_Dan_Punjabi.csv", stringsAsFactors = TRUE, header = FALSE)
+DanTigrinya <- read.csv("t3_final_Dan_Tigrinya.csv", stringsAsFactors = TRUE, header = FALSE)
+DanVietnamese<- read.csv("t3_final_Dan_Vietnamese.csv", stringsAsFactors = TRUE, header = FALSE)
+```
+
+## CREATE FUNCTIONS
+
+```{r}
+# define counting obs function 
+count_obs <- function(x) {
+  x2 <- data.frame(t(x[-1]))
+  colnames(x2) <- x[, 1]
+  x2 <- remove_rownames(x2)
+  x3 <- x2 %>% gather(Male, Female, key = "SEXP", value = "Count")
+  x3 %>% 
+  summarise(
+    valid = sum(Count != 0),
+    missing = sum(Count == 0)
+  )
+  }
+```
+
+
+```{r}
+#define tidy function
+tidy <- function(x) {
+  x2 <- data.frame(t(x[-1]))
+  colnames(x2) <- x[, 1]
+  x2 <- remove_rownames(x2)
+  x3 <- x2 %>% gather(Male, Female, key = "SEXP", value = "Count")
+}
+```
+
+
+```{r}
+DanSerbian
+```
+
+```{r}
+Serb2 <- tidy(DanSerbian)
+Serb2
+```
+
+```{r}
+colnames(Serb2)
+```
+
+
+## APPLY FUNCTIONS
+
+**tidy & save output with Dan prefix removed**
+y <- tidy(x)
+
+```{r}
+# save output with Dan prefix removed
+Serbian <- tidy(DanSerbian)
+Sinhalese <- tidy(DanSinhalese)
+Spanish <- tidy(DanSpanish)
+Tamil <- tidy(DanTamil)
+Turkish <- tidy(DanTurkish)
+Urdu <- tidy(DanUrdu)
+Albanian <- tidy(DanAlbanian)
+Burmese <- tidy(DanBurmese)
+Hindi <- tidy(DanHindi)
+Italian <- tidy(DanItalian)
+Arabic <- tidy(DanArabic)
+Cantonese <- tidy(DanCantonese)
+Dari<- tidy(DanDari)
+Greek <- tidy(DanGreek)
+Hazaraghi <- tidy(DanHazaraghi)
+Khmer <- tidy(DanKhmer)
+Mandarin <- tidy(DanMandarin)
+Punjabi <- tidy(DanPunjabi)
+Tigrinya <- tidy(DanTigrinya)
+Vietnamese <- tidy(DanVietnamese)
+```
+
+
+```{r}
+colnames(Hakka)
+```
+```{r}
+colnames(Greek)
+```
+```{r}
+names <- c("LGA", "LANP", "HEAP", "EETP",  "NEDD",  "ENGP", "BPLP", "YARRP", "SEXP","Count")
+names
+```
+```{r}
+names(Greek) <- names
+head(Greek)
+```
+```{r}
+names(Vietnamese) <- names
+head(Vietnamese)
+```
+
+
+**count obs**
+count_obs(x) * use original file with Dan prefix
+
+```{r}
+count_obs(DanSerbian)
+count_obs(DanSinhalese)
+count_obs(DanSpanish)
+count_obs(DanTamil)
+count_obs(DanTurkish)
+count_obs(DanUrdu)
+count_obs(DanAlbanian)
+count_obs(DanBurmese)
+count_obs(DanHindi)
+count_obs(DanItalian)
+count_obs(DanArabic)
+count_obs(DanCantonese)
+count_obs(DanDari)
+count_obs(DanGreek)
+count_obs(DanHazaraghi)
+count_obs(DanKhmer)
+count_obs(DanMandarin)
+count_obs(DanPunjabi)
+count_obs(DanTigrinya)
+count_obs(DanVietnamese)
+
+```
+
+## EXPORT OUTPUT
+
+write.csv(y,"y.csv", row.names = FALSE)
+
+```{r}
+write.csv(Serbian,"Serbian.csv", row.names = FALSE)
+write.csv(Sinhalese,"Sinhalese.csv", row.names = FALSE) 
+write.csv(Spanish, "Spanish.csv", row.names = FALSE)
+write.csv(Tamil, "Tamil.csv", row.names = FALSE)
+write.csv(Turkish, "Turkish.csv", row.names = FALSE)
+write.csv(Urdu, "Urdu.csv", row.names = FALSE)
+write.csv(Albanian, "Albanian.csv", row.names = FALSE)
+write.csv(Burmese, "Burmese.csv", row.names = FALSE)
+write.csv(Hindi, "Hindi.csv", row.names = FALSE)
+write.csv(Italian, "Italian.csv", row.names = FALSE) 
+write.csv(Arabic, "Arabic.csv", row.names = FALSE) 
+write.csv(Cantonese, "Cantonese.csv", row.names = FALSE)
+write.csv(Dari, "Dari.csv", row.names = FALSE)
+write.csv(Greek, "Greek.csv", row.names = FALSE) 
+write.csv(Hazaraghi, "Hazaraghi.csv", row.names = FALSE) 
+write.csv(Khmer, "Khmer.csv", row.names = FALSE) 
+write.csv(Mandarin, "Mandarin.csv", row.names = FALSE) 
+write.csv(Punjabi, "Punjabi.csv", row.names = FALSE) 
+write.csv(Tigrinya, "Tigrinya.csv", row.names = FALSE) 
+write.csv(Vietnamese, "Vietnamese.csv", row.names = FALSE)
+```
+
+# Batch 2
+
+```{r}
+DanBosnian <- read.csv("t3_final_Dan_Bosnian.csv", stringsAsFactors = TRUE, header = FALSE)
+DanMalayalam <- read.csv("t3_final_Dan_Malayalam.csv", stringsAsFactors = TRUE, header = FALSE)
+DanTagalog <- read.csv("t3_final_Dan_Tagalog.csv", stringsAsFactors = TRUE, header = FALSE)
+DanFrench <- read.csv("t3_final_Dan_French.csv", stringsAsFactors = TRUE, header = FALSE)
+DanPersian_ex_Dari <- read.csv("t3_final_Dan_Persian_ex_Dari.csv", stringsAsFactors = TRUE, header = FALSE)
+DanCroatian <- read.csv("t3_final_Dan_Croatian.csv", stringsAsFactors = TRUE, header = FALSE)
+DanMin_Nan <- read.csv("t3_final_Dan_Min_Nan.csv", stringsAsFactors = TRUE, header = FALSE)
+DanPashto <- read.csv("t3_final_Dan_Pashto.csv", stringsAsFactors = TRUE, header = FALSE)
+DanPolish <- read.csv("t3_final_Dan_Polish.csv", stringsAsFactors = TRUE, header = FALSE)
+DanSamoan <- read.csv("t3_final_Dan_Samoan.csv", stringsAsFactors = TRUE, header = FALSE)
+DanFilipino <- read.csv("t3_final_Dan_Filipino.csv", stringsAsFactors = TRUE, header = FALSE)
+DanBengali <- read.csv("t3_final_Dan_Bengali.csv", stringsAsFactors = TRUE, header = FALSE)
+DanTelugu <- read.csv("t3_final_Dan_Telugu.csv", stringsAsFactors = TRUE, header = FALSE)
+DanGujarati <- read.csv("t3_final_Dan_Gujarati.csv", stringsAsFactors = TRUE, header = FALSE)
+DanIndonesian <- read.csv("t3_final_Dan_Indonesian.csv", stringsAsFactors = TRUE, header = FALSE)
+DanRohingya <- read.csv("t3_final_Dan_Rohingya.csv", stringsAsFactors = TRUE, header = FALSE)
+DanThai <- read.csv("t3_final_Dan_Thai.csv", stringsAsFactors = TRUE, header = FALSE)
+DanRussian <- read.csv("t3_final_Dan_Russian.csv", stringsAsFactors = TRUE, header = FALSE)
+DanHungarian <- read.csv("t3_final_Dan_Hungarian.csv", stringsAsFactors = TRUE, header = FALSE)
+DanHakka <- read.csv("t3_final_Dan_Hakka.csv", stringsAsFactors = TRUE, header = FALSE)
+```
+
+## APPLY FUNCTIONS
+
+**yidy & save output with Dan prefix removed**
+y <- tidy(x)
+
+```{r}
+# save output with Dan prefix removed
+Bosnian <- tidy(DanBosnian)
+Malayalam <- tidy(DanMalayalam)
+Tagalog <- tidy(DanTagalog)
+French <- tidy(DanFrench)
+Persian_ex_Dari <- tidy(DanPersian_ex_Dari)
+Croatian <- tidy(DanCroatian)
+Min_Nan <- tidy(DanMin_Nan)
+Pashto <- tidy(DanPashto)
+Polish <- tidy(DanPolish)
+Samoan <- tidy(DanSamoan)
+Filipino <- tidy(DanFilipino)
+Bengali <- tidy(DanBengali)
+Telugu <- tidy(DanTelugu)
+Gujarati <- tidy(DanGujarati)
+Indonesian <- tidy(DanIndonesian)
+Rohingya <- tidy(DanRohingya)
+Thai <- tidy(DanThai)
+Russian <- tidy(DanRussian)
+Hungarian <- tidy(DanHungarian)
+Hakka <- tidy(DanHakka)
+```
+
+## EXPORT OUTPUT
+
+write.csv(y,"y.csv", row.names = FALSE)
+
+```{r}
+write.csv(Bosnian, "Bosnian.csv", row.names = F)
+write.csv(Malayalam, "Malayalam.csv", row.names = F)
+write.csv(Tagalog,"Tagalog.csv", row.names = F )
+write.csv(French, "French.csv", row.names = F)
+write.csv(Persian_ex_Dari, "Persian_ex_Dari.csv", row.names = F)
+write.csv(Croatian, "Croatian.csv", row.names = F)
+write.csv(Min_Nan, "Min_Nan.csv", row.names = F)
+write.csv(Pashto, "Pashto.csv", row.names = F)
+write.csv(Polish, "Polish.csv", row.names = F)
+write.csv(Samoan, "Samoan.csv", row.names = F)
+write.csv(Filipino, "Filipino.csv", row.names = F)
+write.csv(Bengali, "Bengali.csv", row.names = F)
+write.csv(Telugu,"Telugu.csv", row.names = F )
+write.csv(Gujarati, "Gujarati.csv", row.names = F)
+write.csv(Indonesian, "Indonesian.csv", row.names = F)
+write.csv(Rohingya, "Rohingya.csv", row.names = F)
+write.csv(Thai, "Thai.csv", row.names = F)
+write.csv(Russian, "Russian.csv", row.names = F)
+write.csv(Hungarian, "Hungarian.csv", row.names = F)
+write.csv(Hakka, "Hakka.csv", row.names = F)
+```
+
+## READ IN THE DATA
+
+Dan <- read.csv("t3_final_Dan_.csv", stringsAsFactors = TRUE, header = FALSE)
+
+# Batch 3
+
+```{r}
+DanKorean <- read.csv("t3_final_Dan_Korean.csv", stringsAsFactors = TRUE, header = FALSE)
+DanRomanian <- read.csv("t3_final_Dan_Romanian.csv", stringsAsFactors = TRUE, header = FALSE)
+DanKannada <- read.csv("t3_final_Dan_Kannada.csv", stringsAsFactors = TRUE, header = FALSE)
+DanMacedonian <- read.csv("t3_final_Dan_Macedonian.csv", stringsAsFactors = TRUE, header = FALSE)
+DanMalay <- read.csv("t3_final_Dan_Malay.csv", stringsAsFactors = TRUE, header = FALSE)
+DanSomali <- read.csv("t3_final_Dan_Somali.csv", stringsAsFactors = TRUE, header = FALSE)
+DanMaoriCookIsland <- read.csv("t3_final_Dan_Maori_Cook_Island.csv", stringsAsFactors = TRUE, header = FALSE)
+DanGerman <- read.csv("t3_final_Dan_German.csv", stringsAsFactors = TRUE, header = FALSE)
+DanChineseNfd <- read.csv("t3_final_Dan_Chinese_nfd.csv", stringsAsFactors = TRUE, header = FALSE)
+DanMauritianCreole <- read.csv("t3_final_Dan_Mauritian_Creole.csv", stringsAsFactors = TRUE, header = FALSE)
+DanOromo <- read.csv("t3_final_Dan_Oromo.csv", stringsAsFactors = TRUE, header = FALSE)
+DanMaltese <- read.csv("t3_final_Dan_Maltese.csv", stringsAsFactors = TRUE, header = FALSE)
+DanNuer <- read.csv("t3_final_Dan_Nuer.csv", stringsAsFactors = TRUE, header = FALSE)
+DanNepali <- read.csv("t3_final_Dan_Nepali.csv", stringsAsFactors = TRUE, header = FALSE)
+DanArmenian <- read.csv("t3_final_Dan_Armenian.csv", stringsAsFactors = TRUE, header = FALSE)
+DanSouthernAsianNfd <- read.csv("t3_final_Dan_Southern_Asian_nfd.csv", stringsAsFactors = TRUE, header = FALSE)
+DanLao <- read.csv("t3_final_Dan_Lao.csv", stringsAsFactors = TRUE, header = FALSE)
+DanPortugese <- read.csv("t3_final_Dan_Portugese.csv", stringsAsFactors = TRUE, header = FALSE)
+DanMarathi <- read.csv("t3_final_Dan_Marathi.csv", stringsAsFactors = TRUE, header = FALSE)
+DanJapanese <- read.csv("t3_final_Dan_Japanese.csv", stringsAsFactors = TRUE, header = FALSE)
+```
+
+## APPLY FUNCTIONS
+
+**tidy & save output with Dan prefix removed**
+y <- tidy(x)
+
+```{r}
+# save output with Dan prefix removed
+Korean <- tidy(DanKorean) 
+Romanian <- tidy(DanRomanian)
+Kannada  <- tidy(DanKannada) 
+Macedonian <- tidy(DanMacedonian) 
+Malay <- tidy(DanMalay)
+Somali <- tidy(DanSomali)
+MaoriCookIsland  <- tidy(DanMaoriCookIsland) 
+German <- tidy(DanGerman) 
+ChineseNfd  <- tidy(DanChineseNfd)
+MauritianCreole  <- tidy(DanMauritianCreole) 
+Oromo <- tidy(DanOromo)
+Maltese  <- tidy(DanMaltese) 
+Nuer  <- tidy(DanNuer)
+Nepali  <- tidy(DanNepali)
+Armenian <- tidy(DanArmenian)
+SouthernAsianNfd <- tidy(DanSouthernAsianNfd) 
+Lao <- tidy(DanLao) 
+Portugese <- tidy(DanPortugese)
+Marathi <- tidy(DanMarathi) 
+Japanese <- tidy(DanJapanese) 
+```
+
+## EXPORT OUTPUT
+
+write.csv(y,"y.csv", row.names = FALSE)
+
+```{r}
+write.csv(Korean, "Korean.csv", row.names = F)
+write.csv(Romanian, "Romanian.csv", row.names = F)
+write.csv(Kannada, "Kannada.csv", row.names = F)
+write.csv(Macedonian,"Macedonian.csv", row.names = FALSE)
+write.csv(Malay,"Malay.csv", row.names = FALSE)
+write.csv(Somali,"Somali.csv", row.names = FALSE)
+write.csv(MaoriCookIsland,"MaoriCookIsland.csv", row.names = FALSE)
+write.csv(German,"German.csv", row.names = FALSE)
+write.csv(ChineseNfd,"ChineseNfd.csv", row.names = FALSE)
+write.csv(MauritianCreole,"MauritianCreole.csv", row.names = FALSE)
+write.csv(Oromo,"Oromo.csv", row.names = FALSE)
+write.csv(Maltese,"Maltese.csv", row.names = FALSE)
+write.csv(Nuer,"Nuer.csv", row.names = FALSE)
+write.csv(Nepali,"Nepali.csv", row.names = FALSE)
+write.csv(Armenian,"Armenian.csv", row.names = FALSE)
+write.csv(SouthernAsianNfd,"SouthernAsianNfd.csv", row.names = FALSE)
+write.csv(Lao,"Lao.csv", row.names = FALSE)
+write.csv(Portugese,"Portugese.csv", row.names = FALSE)
+write.csv(Marathi,"Marathi.csv", row.names = FALSE)
+write.csv(Japanese,"Japanese.csv", row.names = FALSE)
+```
+
+## READ IN THE DATA
+
+Dan <- read.csv("t3_final_Dan_.csv", stringsAsFactors = TRUE, header = FALSE)
+
+# Batch 4
+
+```{r}
+DanSerboCroatYugo <- read.csv("t3_final_Dan_Serbo_Croat_Yugo_sodescribed.csv", stringsAsFactors = TRUE, header = FALSE)
+DanDutch <- read.csv("t3_final_Dan_Dutch.csv", stringsAsFactors = TRUE, header = FALSE)
+DanSwahili <- read.csv("t3_final_Dan_Swahili.csv", stringsAsFactors = TRUE, header = FALSE)
+DanFrenchCreoleNfd <- read.csv("t3_final_Dan_French_Creole_nfd.csv", stringsAsFactors = TRUE, header = FALSE)
+DanKaren <- read.csv("t3_final_Dan_Karen.csv", stringsAsFactors = TRUE, header = FALSE)
+DanCreoleNfd <- read.csv("t3_final_Dan_Creole_nfd.csv", stringsAsFactors = TRUE, header = FALSE)
+DanAmharic <- read.csv("t3_final_Dan_Amharic.csv", stringsAsFactors = TRUE, header = FALSE)
+DanDinka <- read.csv("t3_final_Dan_Dinka.csv", stringsAsFactors = TRUE, header = FALSE)
+DanShona <- read.csv("t3_final_Dan_Shona.csv", stringsAsFactors = TRUE, header = FALSE)
+DanMaori_NZ <- read.csv("t3_final_Dan_Maori_NZ.csv", stringsAsFactors = TRUE, header = FALSE)
+DanUkrainian <- read.csv("t3_final_Dan_Ukrainian.csv", stringsAsFactors = TRUE, header = FALSE)
+DanHarari <- read.csv("t3_final_Dan_Harari.csv", stringsAsFactors = TRUE, header = FALSE)
+DanAfrikaans <- read.csv("t3_final_Dan_Afrikaans.csv", stringsAsFactors = TRUE, header = FALSE)
+DanTongan <- read.csv("t3_final_Dan_Tongan.csv", stringsAsFactors = TRUE, header = FALSE)
+DanCzech <- read.csv("t3_final_Dan_Czech.csv", stringsAsFactors = TRUE, header = FALSE)
+DanKonkani <- read.csv("t3_final_Dan_Konkani.csv", stringsAsFactors = TRUE, header = FALSE)
+DanKrio <- read.csv("t3_final_Dan_Krio.csv", stringsAsFactors = TRUE, header = FALSE)
+DanTibetan <- read.csv("t3_final_Dan_Tibetan.csv", stringsAsFactors = TRUE, header = FALSE)
+DanUygur <- read.csv("t3_final_Dan_Uygur.csv", stringsAsFactors = TRUE, header = FALSE)
+DanIranic <- read.csv("t3_final_Dan_Iranic.csv", stringsAsFactors = TRUE, header = FALSE)
+```
+
+## APPLY FUNCTIONS
+
+**tidy & save output with Dan prefix removed**
+y <- tidy(x)
+
+```{r}
+# save output with Dan prefix removed
+SerboCroatYugo <- tidy(DanSerboCroatYugo)
+Dutch <- tidy(DanDutch)
+Swahili <- tidy(DanSwahili)
+FrenchCreoleNfd <- tidy(DanFrenchCreoleNfd)
+Karen <- tidy(DanKaren)
+CreoleNfd <- tidy(DanCreoleNfd)
+Amharic <- tidy(DanAmharic)
+Dinka <- tidy(DanDinka)
+Shona <- tidy(DanShona)
+MaoriNZ <- tidy(DanMaori_NZ)
+Ukrainian <- tidy(DanUkrainian)
+Harari <- tidy(DanHarari)
+Afrikaans <- tidy(DanAfrikaans)
+Tongan <- tidy(DanTongan)
+Czech <- tidy(DanCzech)
+Konkani <- tidy(DanKonkani)
+Krio <- tidy(DanKrio)
+Tibetan <- tidy(DanTibetan)
+Uygur <- tidy(DanUygur)
+Iranic <- tidy(DanIranic)
+```
+
+## EXPORT OUTPUT
+
+write.csv(y,"y.csv", row.names = FALSE)
+
+```{r}
+write.csv(SerboCroatYugo,"SerboCroatYugo.csv", row.names = FALSE)
+write.csv(Dutch,"Dutch.csv", row.names = FALSE)
+write.csv(Swahili,"Swahili.csv", row.names = FALSE)
+write.csv(FrenchCreoleNfd,"FrenchCreoleNfd.csv", row.names = FALSE)
+write.csv(Karen,"Karen.csv", row.names = FALSE)
+write.csv(CreoleNfd,"CreoleNfd.csv", row.names = FALSE)
+write.csv(Amharic,"Amharic.csv", row.names = FALSE)
+write.csv(Dinka,"Dinka.csv", row.names = FALSE)
+write.csv(Shona,"Shona.csv", row.names = FALSE)
+write.csv(MaoriNZ,"MaoriNZ.csv", row.names = FALSE)
+write.csv(Ukrainian,"Ukrainian.csv", row.names = FALSE)
+write.csv(Harari,"Harari.csv", row.names = FALSE)
+write.csv(Afrikaans,"Afrikaans.csv", row.names = FALSE)
+write.csv(Tongan,"Tongan.csv", row.names = FALSE)
+write.csv(Czech,"Czech.csv", row.names = FALSE)
+write.csv(Konkani,"Konkani.csv", row.names = FALSE)
+write.csv(Krio,"Krio.csv", row.names = FALSE)
+write.csv(Tibetan,"Tibetan.csv", row.names = FALSE)
+write.csv(Uygur,"Uygur.csv", row.names = FALSE)
+write.csv(Iranic,"Iranic.csv", row.names = FALSE)
+```
+
+## READ IN THE DATA
+
+Dan <- read.csv("t3_final_Dan_.csv", stringsAsFactors = TRUE, header = FALSE)
+
+# Batch 5
+
+```{r}
+DanShilluk <- read.csv("t3_final_Dan_Shilluk.csv", stringsAsFactors = TRUE, header = FALSE)
+DanKirundi <- read.csv("t3_final_Dan_Kirundi.csv", stringsAsFactors = TRUE, header = FALSE)
+DanFijian <- read.csv("t3_final_Dan_Fijian.csv", stringsAsFactors = TRUE, header = FALSE)
+DanAfricanLangNec <- read.csv("t3_final_Dan_African_Lang_nec.csv", stringsAsFactors = TRUE, header = FALSE)
+DanSlovene <- read.csv("t3_final_Dan_Slovene.csv", stringsAsFactors = TRUE, header = FALSE)
+DanAfricanLangNfd <- read.csv("t3_final_Dan_African_nfd.csv", stringsAsFactors = TRUE, header = FALSE)
+DanChaldeanNeoAramaic <- read.csv("t3_final_Dan_Chaldean_Neo_Aramaic.csv", stringsAsFactors = TRUE, header = FALSE)
+DanKurdish <- read.csv("t3_final_Dan_Kurdish.csv", stringsAsFactors = TRUE, header = FALSE)
+DanMon <- read.csv("t3_final_Dan_Mon.csv", stringsAsFactors = TRUE, header = FALSE)
+DanSlovak <- read.csv("t3_final_Dan_Slovak.csv", stringsAsFactors = TRUE, header = FALSE)
+DanBisaya <- read.csv("t3_final_Dan_Bisaya.csv", stringsAsFactors = TRUE, header = FALSE)
+DanIndoAryanNfd <- read.csv("t3_final_Dan_Indo_Aryan_nfd.csv", stringsAsFactors = TRUE, header = FALSE)
+DanTetum <- read.csv("t3_final_Dan_Tetum.csv", stringsAsFactors = TRUE, header = FALSE)
+DanTulu <- read.csv("t3_final_Dan_Tulu.csv", stringsAsFactors = TRUE, header = FALSE)
+DanFijianHindustani <- read.csv("t3_final_Dan_Fijian_Hindustani.csv", stringsAsFactors = TRUE, header = FALSE)
+DanTimorese <- read.csv("t3_final_Dan_Timorese.csv", stringsAsFactors = TRUE, header = FALSE)
+DanYoruba <- read.csv("t3_final_Dan_Yoruba.csv", stringsAsFactors = TRUE, header = FALSE)
+DanFinnish <- read.csv("t3_final_Dan_Finnish.csv", stringsAsFactors = TRUE, header = FALSE)
+DanBulgarian <- read.csv("t3_final_Dan_Bulgarian.csv", stringsAsFactors = TRUE, header = FALSE)
+DanCebuano <- read.csv("t3_final_Dan_Cebuano.csv", stringsAsFactors = TRUE, header = FALSE)
+```
+
+## APPLY FUNCTIONS
+
+**tidy & save output with Dan prefix removed**
+y <- tidy(x)
+
+```{r}
+Shilluk <- tidy(DanShilluk)
+Kirundi <- tidy(DanKirundi)
+Fijian <- tidy(DanFijian)
+AfricanLangNec <- tidy(DanAfricanLangNec)
+Slovene <- tidy(DanSlovene)
+AfricanLangNfd <- tidy(DanAfricanLangNfd)
+ChaldeanNeoAramaic <- tidy(DanChaldeanNeoAramaic)
+Kurdish <- tidy(DanKurdish)
+Mon <- tidy(DanMon)
+Slovak <- tidy(DanSlovak)
+Bisaya <- tidy(DanBisaya)
+IndoAryanNfd <- tidy(DanIndoAryanNfd)
+Tetum <- tidy(DanTetum)
+Tulu <- tidy(DanTulu)
+FijianHindustani <- tidy(DanFijianHindustani)
+Timorese <- tidy(DanTimorese)
+Yoruba <- tidy(DanYoruba)
+Finnish <- tidy(DanFinnish)
+Bulgarian <- tidy(DanBulgarian)
+Cebuano <-tidy(DanCebuano)
+```
+
+## EXPORT OUTPUT
+
+write.csv(y,"y.csv", row.names = FALSE)
+
+```{r}
+write.csv(Shilluk,"Shilluk.csv", row.names = FALSE)
+write.csv(Kirundi,"Kirundi.csv", row.names = FALSE)
+write.csv(Fijian,"Fijian.csv", row.names = FALSE)
+write.csv(AfricanLangNec,"AfricanLangNec.csv", row.names = FALSE)
+write.csv(Slovene,"Slovene.csv", row.names = FALSE)
+write.csv(AfricanLangNfd,"AfricanLangNfd.csv", row.names = FALSE)
+write.csv(ChaldeanNeoAramaic,"ChaldeanNeoAramaic.csv", row.names = FALSE)
+write.csv(Kurdish,"Kurdish.csv", row.names = FALSE)
+write.csv(Mon,"Mon.csv", row.names = FALSE)
+write.csv(Slovak,"Slovak.csv", row.names = FALSE)
+write.csv(Bisaya,"Bisaya.csv", row.names = FALSE)
+write.csv(IndoAryanNfd,"IndoAryanNfd.csv", row.names = FALSE)
+write.csv(Tetum,"Tetum.csv", row.names = FALSE)
+write.csv(Tulu,"Tulu.csv", row.names = FALSE)
+write.csv(FijianHindustani,"FijianHindustani.csv", row.names = FALSE)
+write.csv(Timorese,"Timorese.csv", row.names = FALSE)
+write.csv(Yoruba,"Yoruba.csv", row.names = FALSE)
+write.csv(Finnish,"Finnish.csv", row.names = FALSE)
+write.csv(Bulgarian,"Bulgarian.csv", row.names = FALSE)
+write.csv(Cebuano,"Cebuano.csv", row.names = FALSE)
+```
+
+## READ IN THE DATA
+
+Dan <- read.csv("t3_final_Dan_.csv", stringsAsFactors = TRUE, header = FALSE)
+
+# Batch 6
+
+```{r}
+DanHebrew <- read.csv("t3_final_Dan_Hebrew.csv", stringsAsFactors = TRUE, header = FALSE)
+DanKinyarwanda <- read.csv("t3_final_Dan_Kinyarwanda.csv", stringsAsFactors = TRUE, header = FALSE)
+DanIgbo <- read.csv("t3_final_Dan_Igbo.csv", stringsAsFactors = TRUE, header = FALSE)
+DanNdebele <- read.csv("t3_final_Dan_Ndebele.csv", stringsAsFactors = TRUE, header = FALSE)
+DanPidginNfd <- read.csv("t3_final_Dan_Pidgin_nfd.csv", stringsAsFactors = TRUE, header = FALSE)
+DanHausa <- read.csv("t3_final_Dan_Hausa.csv", stringsAsFactors = TRUE, header = FALSE)
+DanOriya <- read.csv("t3_final_Dan_Oriya.csv", stringsAsFactors = TRUE, header = FALSE)
+DanTokPisin <- read.csv("t3_final_Dan_Tok_Pisin.csv", stringsAsFactors = TRUE, header = FALSE)
+DanChinHaka <- read.csv("t3_final_Dan_Chin_Haka.csv", stringsAsFactors = TRUE, header = FALSE)
+DanAcholi <- read.csv("t3_final_Dan_Acholi.csv", stringsAsFactors = TRUE, header = FALSE)
+DanTigre <- read.csv("t3_final_Dan_Tigre.csv", stringsAsFactors = TRUE, header = FALSE)
+DanAkan <- read.csv("t3_final_Dan_Akan.csv", stringsAsFactors = TRUE, header = FALSE)
+DanIlokano <- read.csv("t3_final_Dan_Ilokano.csv", stringsAsFactors = TRUE, header = FALSE)
+```
+
+## APPLY FUNCTIONS
+
+**tidy & save output with Dan prefix removed**
+y <- tidy(x)
+
+```{r}
+Hebrew <- tidy(DanHebrew)
+Kinyarwanda <- tidy(DanKinyarwanda)
+Igbo <- tidy(DanIgbo)
+Ndebele <- tidy(DanNdebele)
+PidginNfd <- tidy(DanPidginNfd)
+Hausa <- tidy(DanHausa)
+Oriya <- tidy(DanOriya)
+TokPisin <- tidy(DanTokPisin)
+ChinHaka <- tidy(DanChinHaka)
+Acholi <- tidy(DanAcholi)
+Tigre <- tidy(DanTigrinya)
+Akan <- tidy(DanAkan)
+Ilokano <-tidy(DanIlokano)
+```
+
+## EXPORT OUTPUT
+
+write.csv(y,"y.csv", row.names = FALSE)
+
+```{r}
+write.csv(Hebrew,"Hebrew.csv", row.names = FALSE)
+write.csv(Kinyarwanda,"Kinyarwanda.csv", row.names = FALSE)
+write.csv(Igbo,"Igbo.csv", row.names = FALSE)
+write.csv(Ndebele,"Ndebele.csv", row.names = FALSE)
+write.csv(PidginNfd,"PidginNfd.csv", row.names = FALSE)
+write.csv(Hausa,"Hausa.csv", row.names = FALSE)
+write.csv(Oriya,"Oriya.csv", row.names = FALSE)
+write.csv(TokPisin,"TokPisin.csv", row.names = FALSE)
+write.csv(ChinHaka,"ChinHaka.csv", row.names = FALSE)
+write.csv(Acholi,"Acholi.csv", row.names = FALSE)
+write.csv(Tigre,"Tigre.csv", row.names = FALSE)
+write.csv(Akan,"Akan.csv", row.names = FALSE)
+write.csv(Ilokano,"Ilokano.csv", row.names = FALSE)
+```
+
