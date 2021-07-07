@@ -1,0 +1,160 @@
+---
+title: "2_summarise"
+author: "Fiona Neilson"
+date: "23/06/2021"
+output:
+  word_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# 2 SUMMARISE DATA
+
+## 2.1 Import libraries
+
+```{r, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(dplyr)
+library(ggplot2)
+library(tidyr) 
+library(tibble)
+library(stringr)
+```
+
+## 2.2 Read in dataframe
+
+```{r}
+df = read.csv("out_df.csv", header=TRUE)
+```
+
+
+## 2.3 Compute weighted counts
+
+### 2.3.1 Sum of cases
+
+```{r}
+sum(df$total)
+```
+
+### 2.3.2 Counts per variable
+
+#### 2.3.2.1 LANP - Language Spoken at Home
+
+This shows the counts of people who speak languages other than English at home, in descending order. 
+
+```{r}
+df %>% count(LANP, wt = total) %>% arrange(desc(n))
+```
+
+#### 2.3.2.2 HEAP - Level of Highest Educational Attainment
+
+```{r}
+df %>% count(HEAP, wt = total) %>% arrange(match(HEAP, c("Higher", "Secondary", "Non-Secondary")))
+
+```
+
+#### 2.3.2.3 EETP - Engagement in Employment, Education and Training
+
+```{r}
+df %>% count(EETP, wt = total) %>% arrange(match(EETP, c("Fully", "Partial", "Not_Engaged")))
+```
+
+#### 2.3.2.4 NEDD - Dwelling Internet Connection
+
+```{r}
+df %>% count(NEDD, wt = total) 
+```
+
+#### 2.3.2.5 ENGP - Proficiency in Spoken English
+
+```{r}
+df %>% count(ENGP, wt = total)
+```
+
+#### 2.3.2.6 BPLP - Country of Birth 
+
+```{r}
+df %>% count(BPLP, wt = total) %>% arrange(desc(n)) %>% head(10)
+```
+
+#### 2.3.2.7 YARRP - Year of Arrival in Australia
+
+```{r}
+df %>% count(YARRP, wt = total) %>% arrange(desc(n))
+```
+
+#### 2.3.2.8 SEXP - Sex
+
+```{r}
+df %>% count(SEXP, wt = total)
+```
+
+
+## 2.4 Exploration
+
+### 2.4.1 Combine variables and summarise
+
+#### 2.4.2.1 For example, group Engagement in Employment, Education and Training with Internet Access. Show counts.
+
+```{r}
+df %>% select(EETP, NEDD, total) %>% head(10)
+```
+
+#### 2.4.2.2 Another example: group by Language Spoken at Home and Engagement in Employment, Education and Training. Show counts. 
+
+```{r}
+# grouping and summarising - arranged by population
+df %>% group_by(LANP, EETP) %>% summarise(total_pop = sum(total)) %>% arrange(desc(total_pop))
+```
+
+#### 2.4.2.3 Another example: filter by language group and explore English proficiency. Show as percentage. 
+
+```{r, message=FALSE, warning=FALSE}
+# English proficiency by gender for a language group (Urdu)
+df %>% filter(LANP == "Urdu") %>% group_by(ENGP, SEXP) %>% summarise(Total = sum(total)) %>% mutate(Grand_Total = sum(Total)) %>% mutate(Perc = Total / Grand_Total * 100)
+```
+
+#### 2.4.2.4 Another example: explore the relationship between Proficiency in Spoken English and those not engaged in Engagement in Employment, Education or Training. Show counts. 
+
+```{r, message=FALSE, warning=FALSE}
+# what relationship does English (ENGP) have with the portion of the Non_Engaged (EETP)? 
+# 1 - select these groups
+EETP_group <- df %>% 
+  group_by(
+    EETP, ENGP
+      )
+# 2 - summarise all levels
+EETP_group %>% 
+  summarise(total = sum(total))
+
+# 3 filter to one level
+NotEngaged <- EETP_group %>% 
+  filter(
+    EETP == "Not_Engaged"
+  ) %>% 
+  summarise(total = sum(total))
+NotEngaged
+```
+
+#### 2.4.2.5 Another example: explore the relationship between Proficiency in Spoken English and Language Spoken at Home
+
+```{r}
+# what relationship does English Proficiency have with language spoken at home (LANP)? 
+# 1 - select these groups
+English <- df %>% 
+  group_by(
+    LANP, ENGP
+      ) %>% 
+  summarise(
+    total = sum(total)
+    )
+English 
+```
+## 2.5 Export file 
+
+```{r}
+write.csv(df, file="out_2_df.csv")
+```
